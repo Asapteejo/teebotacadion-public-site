@@ -49,3 +49,10 @@ coverage/
 .env.*
 !.env.example
 *.log
+node_modules
+.env
+dist
+build
+.next
+coverage
+*.log

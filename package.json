@@ -1,0 +1,33 @@
+{
+  "name": "teebotacadion-public-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/clean-next.js && next dev",
+    "build": "node scripts/check-env.mjs && node scripts/clean-next.js && next build",
+    "start": "next start",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "publicsite:smoke": "node scripts/check-env.mjs",
+    "smoke:public": "node scripts/public-route-smoke.js",
+    "smoke:public-admissions": "node scripts/smoke-public-admissions.js"
+  },
+  "dependencies": {
+    "framer-motion": "^12.28.1",
+    "next": "14.0.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "swiper": "^12.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.3",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5"
+  }
+}
+

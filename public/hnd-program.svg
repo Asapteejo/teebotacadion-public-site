@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#f2f4f7" />
+  <rect x="60" y="60" width="680" height="380" fill="#e5e9ef" rx="20" />
+  <text x="400" y="240" font-family="Georgia, serif" font-size="36" fill="#1f3b63" text-anchor="middle">
+    HND Program
+  </text>
+  <text x="400" y="290" font-family="Arial, sans-serif" font-size="18" fill="#6b7280" text-anchor="middle">
+    Replace this placeholder with your program image.
+  </text>
+</svg>

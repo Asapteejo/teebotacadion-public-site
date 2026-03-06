@@ -94,7 +94,15 @@ export default async function Home() {
 
   const featuredPrograms = (() => {
     if (!catalog || catalog.length === 0) return [];
-    const programs = [];
+    const programs: Array<{
+      id: string;
+      name: string;
+      degree?: string;
+      durationYears?: number;
+      imageUrl?: string;
+      departmentName: string;
+      facultyName: string;
+    }> = [];
     catalog.forEach((faculty) => {
       (faculty.departments || []).forEach((dept) => {
         (dept.programs || []).forEach((prog) => {

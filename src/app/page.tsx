@@ -4,7 +4,25 @@ import { fetchPublicSiteSnapshot } from '@/lib/publicSiteApi';
 import { getTenantRequestContext, buildPublicSiteHeaders } from '@/lib/tenant';
 import { notFound } from 'next/navigation';
 
-async function getCatalog() {
+type Program = {
+  id: string;
+  name: string;
+  degree?: string;
+  durationYears?: number;
+  imageUrl?: string;
+};
+
+type Department = {
+  name: string;
+  programs?: Program[];
+};
+
+type Faculty = {
+  name: string;
+  departments?: Department[];
+};
+
+async function getCatalog(): Promise<Faculty[]> {
   try {
     const context = getTenantRequestContext();
     const tenantQuery = context.isLocal
@@ -26,7 +44,7 @@ async function getCatalog() {
       }
     );
     if (!res.ok) return [];
-    return res.json();
+    return (await res.json()) as Faculty[];
   } catch (error) {
     console.error('Error fetching catalog:', error);
     return [];
@@ -39,7 +57,7 @@ export default async function Home() {
   if (snapshot?.__notFound) {
     notFound();
   }
-  const [catalog] = await Promise.all([
+  const [catalog]: [Faculty[]] = await Promise.all([
     getCatalog(),
   ]);
   const cmsData = snapshot?.pages?.find((page: any) => page.slug === 'home') || null;

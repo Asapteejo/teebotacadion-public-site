@@ -265,11 +265,13 @@ export default function Navigation({ institution, menuItems: menuItemsProp = [],
                 {item.name}
               </Link>
             ))}
-            {menuItems.map((menu: MenuGroup) => (
+            {menuItems.map((menu: MenuGroup) => {
+              const menuTitle = menu.title || '';
+              return (
               <div
-                key={menu.title}
+                key={menuTitle}
                 className="relative group"
-                onMouseEnter={() => setActiveDropdown(menu.title)}
+                onMouseEnter={() => setActiveDropdown(menuTitle)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
                 <button
@@ -279,18 +281,18 @@ export default function Navigation({ institution, menuItems: menuItemsProp = [],
                       : 'text-white hover:text-accent'
                   }`}
                 >
-                  {menu.title}
+                  {menuTitle}
                 </button>
 
                 {/* Dropdown */}
                 <div
                   className={`absolute top-full left-0 mt-2 w-56 bg-white shadow-medium rounded-md overflow-hidden transition-all duration-300 ${
-                    activeDropdown === menu.title
+                    activeDropdown === menuTitle
                       ? 'opacity-100 visible translate-y-0'
                       : 'opacity-0 invisible -translate-y-2'
                   }`}
                 >
-                  {menu.title?.toLowerCase() === 'academics' && facultyList.length > 0 ? (
+                  {menuTitle.toLowerCase() === 'academics' && facultyList.length > 0 ? (
                     <div className="w-[32rem] max-h-[70vh] overflow-auto p-4 grid grid-cols-2 gap-4">
                       <div className="col-span-2 pb-2 border-b border-neutral">
                         <Link href="/academics/faculties" className="text-primary font-semibold hover:underline">
@@ -341,7 +343,8 @@ export default function Navigation({ institution, menuItems: menuItemsProp = [],
                   )}
                 </div>
               </div>
-            ))}
+            );
+            })}
             <Link
               href={portalHref}
               target="_blank"
@@ -394,17 +397,19 @@ export default function Navigation({ institution, menuItems: menuItemsProp = [],
               {item.name}
             </Link>
           ))}
-          {menuItems.map((menu: MenuGroup) => (
-            <div key={menu.title} className="border-t border-gray-200 py-3">
+          {menuItems.map((menu: MenuGroup) => {
+            const menuTitle = menu.title || '';
+            return (
+            <div key={menuTitle} className="border-t border-gray-200 py-3">
               <button
                 type="button"
                 className="w-full flex items-center justify-between font-semibold text-primary py-1"
-                onClick={() => toggleMobileGroup(menu.title || '')}
-                aria-expanded={Boolean(openMobileGroups[menu.title || ''])}
+                onClick={() => toggleMobileGroup(menuTitle)}
+                aria-expanded={Boolean(openMobileGroups[menuTitle])}
               >
-                <span>{menu.title}</span>
+                <span>{menuTitle}</span>
                 <svg
-                  className={`h-4 w-4 transition-transform duration-200 ${openMobileGroups[menu.title || ''] ? 'rotate-180' : ''}`}
+                  className={`h-4 w-4 transition-transform duration-200 ${openMobileGroups[menuTitle] ? 'rotate-180' : ''}`}
                   viewBox="0 0 20 20"
                   fill="none"
                   stroke="currentColor"
@@ -415,10 +420,10 @@ export default function Navigation({ institution, menuItems: menuItemsProp = [],
               </button>
               <div
                 className={`overflow-hidden transition-all duration-300 ${
-                  openMobileGroups[menu.title || ''] ? 'max-h-[70vh] opacity-100 mt-2' : 'max-h-0 opacity-0'
+                  openMobileGroups[menuTitle] ? 'max-h-[70vh] opacity-100 mt-2' : 'max-h-0 opacity-0'
                 }`}
               >
-                {menu.title?.toLowerCase() === 'academics' && facultyList.length > 0 ? (
+                {menuTitle.toLowerCase() === 'academics' && facultyList.length > 0 ? (
                   <>
                     <Link href="/academics/faculties" className="block py-2 text-textDark hover:text-primary transition-colors duration-200" onClick={() => setIsOpen(false)}>
                       All Faculties
@@ -452,7 +457,8 @@ export default function Navigation({ institution, menuItems: menuItemsProp = [],
                 )}
               </div>
             </div>
-          ))}
+          );
+          })}
           <Link
             href={portalHref}
             target="_blank"

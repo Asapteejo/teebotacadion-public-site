@@ -351,7 +351,7 @@ export default function Admissions() {
                     </p>
                     <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-textDark">
                       {selectedProgram.requirements.length > 0 ? (
-                        selectedProgram.requirements.map((req, idx) => <li key={`${selectedProgram.key}-${idx}`}>{String(req)}</li>)
+                        selectedProgram.requirements.map((req: string, idx: number) => <li key={`${selectedProgram.key}-${idx}`}>{String(req)}</li>)
                       ) : (
                         <li>No specific requirements configured for this program.</li>
                       )}

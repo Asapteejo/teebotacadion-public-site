@@ -5,8 +5,17 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { getClientTenantContext } from '@/lib/tenantClient';
+import { buildTenantAwareSignInUrl } from '@/lib/authRedirect';
 type NavigationProps = {
-  institution: { name: string; logoUrl?: string; portalUrl?: string };
+  institution: {
+    name: string;
+    logoUrl?: string;
+    portalUrl?: string;
+    signInUrl?: string;
+    tenantSlug?: string;
+    tenantId?: string;
+    portalDomain?: string;
+  };
   menuItems?: MenuGroup[] | { label: string; href: string }[];
   academics?: {
     faculties?: Array<{ id: string; name: string; departments?: Array<{ id: string; name: string }> }>;
@@ -67,13 +76,29 @@ export default function Navigation({ institution, menuItems: menuItemsProp = [],
   const [flatItems, setFlatItems] = useState<MenuItem[]>([]);
   const facultyList = Array.isArray(academics?.faculties) ? academics.faculties : [];
   const courseList = Array.isArray(academics?.courses) ? academics.courses : [];
-  const portalHref =
-    institution.portalUrl ||
-    process.env.NEXT_PUBLIC_PORTAL_BASE_URL ||
-    process.env.NEXT_PUBLIC_PORTAL_URL ||
-    '/portal';
+  const [portalHref, setPortalHref] = useState(
+    institution.signInUrl ||
+      process.env.NEXT_PUBLIC_PORTAL_BASE_URL ||
+      process.env.NEXT_PUBLIC_PORTAL_URL ||
+      '/portal'
+  );
 
   // Fetch navigation from CMS / published snapshot
+  useEffect(() => {
+    const currentPath =
+      typeof window !== 'undefined'
+        ? `${window.location.pathname}${window.location.search}${window.location.hash}`
+        : '/';
+    const dynamicSignInUrl = buildTenantAwareSignInUrl({
+      currentHost: typeof window !== 'undefined' ? window.location.hostname : '',
+      tenantSlug: institution.tenantSlug,
+      tenantId: institution.tenantId,
+      tenantPortalDomain: institution.portalDomain,
+      returnTo: currentPath,
+    });
+    setPortalHref(dynamicSignInUrl || institution.signInUrl || '/portal');
+  }, [institution.portalDomain, institution.signInUrl, institution.tenantId, institution.tenantSlug]);
+
   useEffect(() => {
     if (menuItemsProp.length > 0) return;
     const fetchNavigation = async () => {

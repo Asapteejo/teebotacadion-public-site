@@ -6,6 +6,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { fetchPublicSettings, fetchPublicSiteSnapshot } from '@/lib/publicSiteApi';
 import { getTenantRequestContext, sanitizeTenantSlug } from '@/lib/tenant';
+import { buildTenantAwareSignInUrl } from '@/lib/authRedirect';
 
 const inter = Inter({ subsets: ['latin'] });
 export const dynamic = 'force-dynamic';
@@ -83,10 +84,20 @@ export default async function RootLayout({
   const institutionWithPortal = {
     ...settings,
     name: settings.siteName || settings.name || 'School',
+    tenantSlug: portalTenantSlug || '',
+    tenantId: settings?.institutionId || '',
+    portalDomain: settings?.portalDomain || '',
     portalUrl:
       settings.portalUrl ||
       settings.portalLink ||
       derivedPortalUrl,
+    signInUrl: buildTenantAwareSignInUrl({
+      currentHost: tenantContext.domain,
+      tenantSlug: portalTenantSlug || '',
+      tenantId: settings?.institutionId || '',
+      tenantPortalDomain: settings?.portalDomain || '',
+      returnTo: '/',
+    }),
   };
   const homePage = snapshot?.pages?.find((page: any) => page.slug === 'home');
   const footerSections = homePage?.sections || {};
